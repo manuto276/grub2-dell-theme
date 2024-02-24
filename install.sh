@@ -17,9 +17,6 @@ THEME_VARIANTS=('dell')
 # Added "white" icons
 ICON_VARIANTS=('white')
 
-# Screen variants, unmodified
-SCREEN_VARIANTS=('1080p' '2k' '4k' 'ultrawide' 'ultrawide2k')
-
 #################################
 #   :::::: C O L O R S ::::::   #
 #################################
@@ -69,7 +66,6 @@ Usage: $0 [OPTION]...
 OPTIONS:
   -t, --theme     theme variant(s)          [dell]                              (default is dell)
   -i, --icon      icon variant(s)           [white]                             (default is white)
-  -s, --screen    screen display variant(s) [1080p|2k|4k|ultrawide|ultrawide2k] (default is 1080p)
   -r, --remove    Remove theme              [dell]                              (must add theme name option, default is dell)
 
   -b, --boot      install theme into '/boot/grub' or '/boot/grub2'
@@ -179,17 +175,7 @@ install() {
     fi
 
     # Make sure the right resolution for grub is set
-    if [[ ${screen} == '1080p' ]]; then
-      gfxmode="GRUB_GFXMODE=1920x1080,auto"
-    elif [[ ${screen} == 'ultrawide' ]]; then
-      gfxmode="GRUB_GFXMODE=2560x1080,auto"
-    elif [[ ${screen} == '4k' ]]; then
-      gfxmode="GRUB_GFXMODE=3840x2160,auto"
-    elif [[ ${screen} == '2k' ]]; then
-      gfxmode="GRUB_GFXMODE=2560x1440,auto"
-    elif [[ ${screen} == 'ultrawide2k' ]]; then
-      gfxmode="GRUB_GFXMODE=3440x1440,auto"
-    fi
+    gfxmode="GRUB_GFXMODE=1920x1200,auto"
 
     if grep "GRUB_GFXMODE=" /etc/default/grub 2>&1 >/dev/null; then
       #Replace GRUB_GFXMODE
@@ -288,7 +274,7 @@ run_dialog() {
 
     tui=$(dialog --backtitle ${Project_Name} \
     --radiolist "Choose your Grub theme background picture : " 15 40 5 \
-      1 "Dell Theme" on  --output-fd 1 )
+      1 "Default Theme" on  --output-fd 1 )
       case "$tui" in
         1) theme="dell"       ;;
         *) operation_canceled ;;
@@ -296,18 +282,10 @@ run_dialog() {
 
     tui=$(dialog --backtitle ${Project_Name} \
     --radiolist "Choose icon style : " 15 40 5 \
-      1 "white" on --output-fd 1 )
+      1 "Default" on --output-fd 1 )
       case "$tui" in
         1) icon="white"       ;;
         *) operation_canceled ;;
-     esac
-
-    tui=$(dialog --backtitle ${Project_Name} \
-    --radiolist "Choose your Display Resolution : " 15 40 5 \
-      1 "Dell XPS 15 Default" on --output-fd 1 )
-      case "$tui" in
-        1) screen="1920x1200"       ;;
-        *) operation_canceled   ;;
      esac
   fi
 }
@@ -472,7 +450,7 @@ dialog_installer() {
     install_dialog
   fi
   run_dialog
-  install "${theme}" "${icon}" "${screen}"
+  install "${theme}" "${icon}"
   exit 1
 }
 
@@ -541,41 +519,6 @@ while [[ $# -gt 0 ]]; do
         case "${icon}" in
           white)
             icons+=("${ICON_VARIANTS[0]}")
-            shift
-            ;;
-          -*)
-            break
-            ;;
-          *)
-            prompt -e "ERROR: Unrecognized icon variant '$1'."
-            prompt -i "Try '$0 --help' for more information."
-            exit 1
-            ;;
-        esac
-      done
-      ;;
-    -s|--screen)
-      shift
-      for screen in "${@}"; do
-        case "${screen}" in
-          1080p)
-            screens+=("${SCREEN_VARIANTS[0]}")
-            shift
-            ;;
-          2k)
-            screens+=("${SCREEN_VARIANTS[1]}")
-            shift
-            ;;
-          4k)
-            screens+=("${SCREEN_VARIANTS[2]}")
-            shift
-            ;;
-          ultrawide)
-            screens+=("${SCREEN_VARIANTS[3]}")
-            shift
-            ;;
-          ultrawide2k)
-            screens+=("${SCREEN_VARIANTS[4]}")
             shift
             ;;
           -*)
