@@ -5,7 +5,7 @@
 title-text: ""
 desktop-image: "background.jpg"
 desktop-color: "#000000"
-terminal-font: "terminus-12.pf2"
+terminal-font: "Terminus Regular 12"
 terminal-box: "terminal_box_*.png"
 terminal-left: "0"
 terminal-top: "0"
@@ -19,7 +19,7 @@ terminal-border: "0"
   top = 30%
   width = 40%
   height = 40%
-  item_font = "dejavu_sans_16.pf2"
+  item_font = "DejaVu Sans Regular 16"
   item_color = "#cccccc"
   selected_item_color = "#ffffff"
   icon_width = 48
@@ -33,7 +33,7 @@ terminal-border: "0"
 
 # Show images
 + image {
-  top = 100%-64
+  top = 100%-216
   left = 50%-199
   width = 398
   height = 152
@@ -42,12 +42,12 @@ terminal-border: "0"
 
 # Show a countdown message using the label component
 + label {
-  top = 82%
+  top = 100%-280
   left = 32%
   width = 36%
   align = "center"
   id = "__timeout__"
   text = "Booting in %d seconds"
   color = "#cccccc"
-  font = "terminus-12.pf2"
+  font = "Terminus Regular 12"
 }
