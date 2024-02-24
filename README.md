@@ -1,4 +1,6 @@
-![banner](banner.png?raw=true)
+# Dell Theme for Grub2
+
+A simple theme I made for my Dell XPS 15 running Ubuntu 23.10.
 
 ## Installation:
 
@@ -19,22 +21,22 @@ Usage:  `sudo ./install.sh [OPTIONS...]`
 _If no options are used, a user interface `dialog` will show up instead_
 
 ### Examples:
- - Install Tela theme on 2k display device:
+ - Install Dell theme on 2k display device:
 
 ```sh
-sudo ./install.sh -t tela -s 2k
+sudo ./install.sh -t dell -s 2k
 ```
 
- - Install Tela theme into /boot/grub/themes:
+ - Install Dell theme into /boot/grub/themes:
 
 ```sh
-sudo ./install.sh -b -t tela
+sudo ./install.sh -b -t dell
 ```
 
- - Uninstall Tela theme:
+ - Uninstall Dell theme:
 
 ```sh
-sudo ./install.sh -r -t tela
+sudo ./install.sh -r -t dell
 ```
 
 ## Issues / tweaks:
@@ -58,19 +60,3 @@ sudo ./install.sh -r -t tela
  - Place your custom background inside the root of the project, and name it `background.jpg`
  - Run the installer like normal, but with -s `[YOUR_RESOLUTION]` and -t `[THEME]` and -i `[ICON]`
    - Make sure to replace `[YOUR_RESOLUTION]` with your resolution and `[THEME]` with the theme
-
-## Contributing:
- - If you made changes to icons, or added a new one:
-   - Delete the existing icon, if there is one
-   - Run `cd assets; ./render-all.sh`
- - Create a pull request from your branch or fork
- - If any issues occur, report then to the [issue](https://github.com/vinceliuice/grub2-themes/issues) page
-
-## Preview:
-![preview](preview.png?raw=true)
-
-## Documents
-
-[Grub2 theme reference](https://wiki.rosalab.ru/en/index.php/Grub2_theme_/_reference)
-
-[Grub2 theme tutorial](https://wiki.rosalab.ru/en/index.php/Grub2_theme_tutorial)
