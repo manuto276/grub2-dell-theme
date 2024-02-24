@@ -95,12 +95,12 @@ generate() {
   mkdir -p "${THEME_DIR}/${theme}"
 
   # Copy theme
-  prompt -i "\n Installing ${theme} ${icon} ${screen} theme..."
+  prompt -i "\n Installing ${theme} ${icon} theme..."
 
   # Don't preserve ownership because the owner will be root, and that causes the script to crash if it is ran from terminal by sudo
   cp -a --no-preserve=ownership "${REO_DIR}/common/"{*.png,*.pf2} "${THEME_DIR}/${theme}"
-  cp -a --no-preserve=ownership "${REO_DIR}/config/theme-${screen}.txt" "${THEME_DIR}/${theme}/theme.txt"
-  cp -a --no-preserve=ownership "${REO_DIR}/backgrounds/${screen}/background-${theme}.jpg" "${THEME_DIR}/${theme}/background.jpg"
+  cp -a --no-preserve=ownership "${REO_DIR}/config/theme.txt" "${THEME_DIR}/${theme}/theme.txt"
+  cp -a --no-preserve=ownership "${REO_DIR}/backgrounds/background-${theme}.jpg" "${THEME_DIR}/${theme}/background.jpg"
 
   # Use custom background.jpg as grub background image
   if [[ -f "${REO_DIR}/background.jpg" ]]; then
@@ -109,22 +109,21 @@ generate() {
     convert -auto-orient "${THEME_DIR}/${theme}/background.jpg" "${THEME_DIR}/${theme}/background.jpg"
   fi
 
-  cp -a --no-preserve=ownership "${REO_DIR}/assets/assets-${icon}/icons-${screen}" "${THEME_DIR}/${theme}/icons"
-  cp -a --no-preserve=ownership "${REO_DIR}/assets/assets-select/select-${screen}/"*.png "${THEME_DIR}/${theme}"
-  cp -a --no-preserve=ownership "${REO_DIR}/assets/info-${screen}.png" "${THEME_DIR}/${theme}/info.png"
+  cp -a --no-preserve=ownership "${REO_DIR}/assets/assets-${icon}/icons" "${THEME_DIR}/${theme}/icons"
+  cp -a --no-preserve=ownership "${REO_DIR}/assets/assets-select/"*.png "${THEME_DIR}/${theme}"
+  cp -a --no-preserve=ownership "${REO_DIR}/assets/info.png" "${THEME_DIR}/${theme}/info.png"
 }
 
 install() {
   local theme=${1}
   local icon=${2}
-  local screen=${3}
 
   # Check for root access and proceed if it is present
   if [[ "$UID" -eq "$ROOT_UID" ]]; then
     echo -e '\0033\0143'
 
     # Generate the theme in "/usr/share/grub/themes"
-    generate "${theme}" "${icon}" "${screen}"
+    generate "${theme}" "${icon}"
 
     # Set theme
     prompt -i "\n Setting ${theme} as default..."
@@ -210,18 +209,18 @@ install() {
   #Check if password is cached (if cache timestamp has not expired yet)
   elif sudo -n true 2> /dev/null && echo; then
     if [[ "${install_boot}" == 'true' ]]; then
-      sudo "$0" -t ${theme} -i ${icon} -s ${screen} -b
+      sudo "$0" -t ${theme} -i ${icon} -b
     else
-      sudo "$0" -t ${theme} -i ${icon} -s ${screen}
+      sudo "$0" -t ${theme} -i ${icon}
     fi
   else
     #Ask for password
     if [[ -n ${tui_root_login} ]] ; then
-      if [[ -n "${theme}" && -n "${screen}" ]]; then
+      if [[ -n "${theme}" ]]; then
         if [[ "${install_boot}" == 'true' ]]; then
-          sudo -S $0 -t ${theme} -i ${icon} -s ${screen} -b <<< ${tui_root_login}
+          sudo -S $0 -t ${theme} -i ${icon} -b <<< ${tui_root_login}
         else
-          sudo -S $0 -t ${theme} -i ${icon} -s ${screen} <<< ${tui_root_login}
+          sudo -S $0 -t ${theme} -i ${icon} <<< ${tui_root_login}
         fi
       fi
     else
@@ -230,9 +229,9 @@ install() {
       if sudo -S echo <<< $REPLY 2> /dev/null && echo; then
         #Correct password, use with sudo's stdin
         if [[ "${install_boot}" == 'true' ]]; then
-          sudo -S "$0" -t ${theme} -i ${icon} -s ${screen} -b <<< ${REPLY}
+          sudo -S "$0" -t ${theme} -i ${icon} -b <<< ${REPLY}
         else
-          sudo -S "$0" -t ${theme} -i ${icon} -s ${screen} <<< ${REPLY}
+          sudo -S "$0" -t ${theme} -i ${icon} <<< ${REPLY}
         fi
       else
         #block for 3 seconds before allowing another attempt
@@ -553,9 +552,7 @@ if [[ "${dialog:-}" == 'false' ]]; then
   if [[ "${remove:-}" != 'true' ]]; then
     for theme in "${themes[@]-${THEME_VARIANTS[0]}}"; do
       for icon in "${icons[@]-${ICON_VARIANTS[0]}}"; do
-        for screen in "${screens[@]-${SCREEN_VARIANTS[0]}}"; do
-          $install "${theme}" "${icon}" "${screen}"
-        done
+        $install "${theme}" "${icon}"
       done
     done
   elif [[ "${remove:-}" == 'true' ]]; then
