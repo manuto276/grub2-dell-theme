@@ -311,17 +311,9 @@ run_dialog() {
 
     tui=$(dialog --backtitle ${Project_Name} \
     --radiolist "Choose your Display Resolution : " 15 40 5 \
-      1 "1080p (1920x1080)" on  \
-      2 "1080p ultrawide (2560x1080)" off  \
-      3 "2k (2560x1440)" off \
-      4 "4k (3840x2160)" off \
-      5 "1440p ultrawide (3440x1440)" off --output-fd 1 )
+      1 "Dell XPS 15 Default" on --output-fd 1 )
       case "$tui" in
-        1) screen="1080p"       ;;
-        2) screen="ultrawide"   ;;
-        3) screen="2k"          ;;
-        4) screen="4k"          ;;
-        5) screen="ultrawide2k" ;;
+        1) screen="1920x1200"       ;;
         *) operation_canceled   ;;
      esac
   fi
