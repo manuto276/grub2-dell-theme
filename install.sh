@@ -11,8 +11,13 @@ tui_root_login=
 THEME_DIR="/usr/share/grub/themes"
 REO_DIR="$(cd $(dirname $0) && pwd)"
 
-THEME_VARIANTS=('tela' 'vimix' 'stylish' 'whitesur')
-ICON_VARIANTS=('color' 'white' 'whitesur')
+# Added "dell" theme
+THEME_VARIANTS=('dell')
+
+# Added "white" icons
+ICON_VARIANTS=('white')
+
+# Screen variants, unmodified
 SCREEN_VARIANTS=('1080p' '2k' '4k' 'ultrawide' 'ultrawide2k')
 
 #################################
@@ -62,10 +67,10 @@ cat << EOF
 Usage: $0 [OPTION]...
 
 OPTIONS:
-  -t, --theme     theme variant(s)          [tela|vimix|stylish|whitesur]       (default is tela)
-  -i, --icon      icon variant(s)           [color|white|whitesur]              (default is color)
+  -t, --theme     theme variant(s)          [dell]                              (default is dell)
+  -i, --icon      icon variant(s)           [white]                             (default is white)
   -s, --screen    screen display variant(s) [1080p|2k|4k|ultrawide|ultrawide2k] (default is 1080p)
-  -r, --remove    Remove theme              [tela|vimix|stylish|whitesur]       (must add theme name option, default is tela)
+  -r, --remove    Remove theme              [dell]                              (must add theme name option, default is dell)
 
   -b, --boot      install theme into '/boot/grub' or '/boot/grub2'
   -g, --generate  do not install but generate theme into chosen directory       (must add your directory)
@@ -141,12 +146,6 @@ install() {
     # Backup grub config
     if [[ -f /etc/default/grub.bak ]]; then
       prompt -w "\n File '/etc/default/grub.bak' already exists!"
-#      read choice
-#      if [[ "$choice" = 'y' ]]; then
-#        cp -a /etc/default/grub /etc/default/grub.bak
-#      else
-#        prompt -s "Skipping to save a backup configuration in '/etc/default/grub.bak'"
-#      fi
     else
       cp -an /etc/default/grub /etc/default/grub.bak
     fi
@@ -299,27 +298,17 @@ run_dialog() {
 
     tui=$(dialog --backtitle ${Project_Name} \
     --radiolist "Choose your Grub theme background picture : " 15 40 5 \
-      1 "Vimix Theme" off  \
-      2 "Tela Theme" on \
-      3 "Stylish Theme" off  \
-      4 "WhiteSur Theme" off --output-fd 1 )
+      1 "Dell Theme" on  --output-fd 1 )
       case "$tui" in
-        1) theme="vimix"      ;;
-        2) theme="tela"       ;;
-        3) theme="stylish"    ;;
-        4) theme="whitesur"   ;;
+        1) theme="dell"       ;;
         *) operation_canceled ;;
      esac
 
     tui=$(dialog --backtitle ${Project_Name} \
     --radiolist "Choose icon style : " 15 40 5 \
-      1 "white" off \
-      2 "color" on \
-      3 "whitesur" off --output-fd 1 )
+      1 "white" on --output-fd 1 )
       case "$tui" in
         1) icon="white"       ;;
-        2) icon="color"       ;;
-        3) icon="whitesur"    ;;
         *) operation_canceled ;;
      esac
 
@@ -520,20 +509,8 @@ while [[ $# -gt 0 ]]; do
       shift
       for theme in "${@}"; do
         case "${theme}" in
-          tela)
+          dell)
             themes+=("${THEME_VARIANTS[0]}")
-            shift
-            ;;
-          vimix)
-            themes+=("${THEME_VARIANTS[1]}")
-            shift
-            ;;
-          stylish)
-            themes+=("${THEME_VARIANTS[2]}")
-            shift
-            ;;
-          whitesur)
-            themes+=("${THEME_VARIANTS[3]}")
             shift
             ;;
           -*)
@@ -561,20 +538,8 @@ while [[ $# -gt 0 ]]; do
       shift
       for theme in "${@}"; do
         case "${theme}" in
-          tela)
+          dell)
             themes+=("${THEME_VARIANTS[0]}")
-            shift
-            ;;
-          vimix)
-            themes+=("${THEME_VARIANTS[1]}")
-            shift
-            ;;
-          stylish)
-            themes+=("${THEME_VARIANTS[2]}")
-            shift
-            ;;
-          whitesur)
-            themes+=("${THEME_VARIANTS[3]}")
             shift
             ;;
           -*)
@@ -592,16 +557,8 @@ while [[ $# -gt 0 ]]; do
       shift
       for icon in "${@}"; do
         case "${icon}" in
-          color)
-            icons+=("${ICON_VARIANTS[0]}")
-            shift
-            ;;
           white)
-            icons+=("${ICON_VARIANTS[1]}")
-            shift
-            ;;
-          whitesur)
-            icons+=("${ICON_VARIANTS[2]}")
+            icons+=("${ICON_VARIANTS[0]}")
             shift
             ;;
           -*)
